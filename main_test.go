@@ -25,10 +25,25 @@ func TestMain(t *testing.T) {
 	}
 
 	//获取代码片段
-	result, errs := redis.RedisClient.GetSnippet(short)
-	if errs != nil {
+	result, err := redis.RedisClient.GetSnippet(short)
+	if err != nil {
 		t.Error(err)
 	}
 
 	t.Log(result)
+
+	//获取ttl
+	ttl, err := redis.RedisClient.GetSnippetTTL(short)
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(ttl)
+
+	//重新设置过期时间
+	err = redis.RedisClient.ExpireSnippet(short)
+	if err != nil {
+		t.Error(err)
+	}
+
 }

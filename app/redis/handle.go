@@ -33,6 +33,18 @@ func (redis *redisDriver) GetSnippet(id string) (*Snippet, error) {
 	return snippet, err
 }
 
+// GetSnippetTTL : 获取代码片段过期时间
+func (redis *redisDriver) GetSnippetTTL(id string) (time.Duration, error) {
+	ttl, err := redis.client.TTL(conf.Cfg.Redis.Snippet.DetailKey + id).Result()
+	return ttl, err
+}
+
+// ExpireSnippet : 设置过期时间
+func (redis *redisDriver) ExpireSnippet(id string) error {
+	_, err := redis.client.Expire(conf.Cfg.Redis.Snippet.DetailKey+id, time.Duration(conf.Cfg.Redis.Snippet.Expire)*time.Second).Result()
+	return err
+}
+
 // AutoStoreSnippet : 自动保存代码片段
 func (redis *redisDriver) AutoStoreSnippet(value *Snippet) (string, error) {
 	id := redis.IncrID()

@@ -23,8 +23,12 @@ func StartServer() {
 func getSnippet(c *gin.Context) {
 	id := c.Param("id")
 	snippet, err := redis.RedisClient.GetSnippet(id)
+	if snippet != nil {
+		redis.RedisClient.ExpireSnippet(id)
+	}
 
-	c.JSON(http.StatusOK, getResponse(snippet, err))
+	result := getResponse(snippet, err)
+	c.JSON(http.StatusOK, result)
 }
 
 // 保存片段
@@ -38,7 +42,8 @@ func storeSnippet(c *gin.Context) {
 
 	short, err := redis.RedisClient.AutoStoreSnippet(&snippet)
 
-	c.JSON(http.StatusOK, getResponse(short, err))
+	result := getResponse(short, err)
+	c.JSON(http.StatusOK, result)
 }
 
 // 生成响应
@@ -51,6 +56,5 @@ func getResponse(data interface{}, err error) map[string]interface{} {
 		response["error"] = err.Error()
 	}
 	response["data"] = data
-
 	return response
 }
