@@ -6,21 +6,30 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-var Cfg *Config
+// Cfg : 配置
+var Cfg *config
 
-type Config struct {
+type config struct {
 	Redis *redis
-	Http  *http
+	HTTP  *http
 }
 
 type redis struct {
-	Addr string
-	Auth string
-	DB   int
+	Addr    string
+	Auth    string
+	DB      int
+	Snippet *snippet
 }
 
 type http struct {
 	Addr string
+	Mode string
+}
+
+type snippet struct {
+	IncrKey   string
+	DetailKey string
+	Expire    int
 }
 
 func init() {

@@ -1,0 +1,18 @@
+[Redis]
+
+Addr="127.0.0.1:6379"
+Auth=""
+DB=0
+
+[Redis.Snippet]
+IncrKey="snippet:id"
+DetailKey="snippets:detail:"
+# seconds
+Expire=86400
+
+
+[Http]
+
+Addr="127.0.0.1:17000"
+# debug release test
+Mode="debug"
